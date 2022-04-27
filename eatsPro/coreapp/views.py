@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
 
-from coreapp.forms import UserForm, RestaurantForm
+from coreapp.forms import AccountForm, UserForm, RestaurantForm, FoodItemForm
 # Create your views here.
 
 #redirect everyone to homepage, add url in urls.py
@@ -12,15 +12,37 @@ def home(request):
 
 @login_required(login_url = '/restaurant/login/')
 def restaurant_home(request):
-    return render(request, 'restaurant/home.html',{})
+    #return render(request, 'restaurant/home.html',{})
+    return redirect(restaurant_order)
 
 @login_required(login_url = '/restaurant/login/')
 def restaurant_account(request):
-    return render(request, 'restaurant/account.html',{})
+    if request.method == "POST":
+        account_form = AccountForm(request.POST,instance=request.user)
+        restaurant_form = RestaurantForm(request.POST,instance=request.user.restaurant)
+        if account_form.is_valid()  and restaurant_form.is_valid():
+            account_form.save()
+            restaurant_form.save()
+        
+    account_form = AccountForm(instance=request.user)
+    restaurant_form = RestaurantForm(instance=request.user.restaurant)
+
+    return render(request, 'restaurant/account.html',{
+        "account_form": account_form,
+        "restaurant_form": restaurant_form
+    })
 
 @login_required(login_url = '/restaurant/login/')
 def restaurant_meal(request):
     return render(request, 'restaurant/meal.html',{})
+
+def restaurant_add_item(request):
+    food_item_form = FoodItemForm()
+
+    return render(request, 'restaurant/additem.html',{
+        "food_item_form": food_item_form
+        })
+
 
 @login_required(login_url = '/restaurant/login/')
 def restaurant_order(request):

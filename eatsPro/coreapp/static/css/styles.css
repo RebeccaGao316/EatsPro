@@ -1,0 +1,93 @@
+body {
+	font-family: "Varela Round", "Helvetica Neue", "Helvetica", "Arial",
+		sans-serif;
+}
+
+.jumbotron {
+  background-color: white;
+}
+
+.bg-gradient {
+  background-color: rgb(116, 145, 182);
+  background-image: linear-gradient(
+    180deg,
+    rgb(116, 145, 182) 10%,
+    rgb(20, 86, 87) 100%
+  );
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.btn-black {
+  color: white;
+  background-color: black;
+  border-color: black;
+}
+
+.btn-black:hover {
+  color: white;
+  background-color: #1b1d1d;
+  border-color: #1b1d1d;
+}
+
+.page_title{
+  height: 120vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 0;
+  background-color: lightgrey;
+  background-image: linear-gradient(
+    180deg,
+    rgb(214, 218, 222) 10%,
+    rgb(200, 250, 250) 100%
+  );
+  background-size: cover;
+  overflow: auto;
+}
+
+/* HEADER*/
+.page_title > div:first-child{
+  font-weight: bold;
+  color: black;
+}
+
+.page_title > div:first-child > h6{
+  color: rgb(175, 135, 215);
+}
+
+/*hoempage, listing*/
+.sidebar .list-group > span {
+  color:rgb(7, 98, 101);
+  display: block;
+  margin-top: 30px;
+  padding: 30px 40px;
+  font-size: 16px;
+  font-weight: 300;
+}
+
+.sidebar .list-group .list-group-item {
+  background-color: transparent;
+  color:rgb(7, 98, 101);
+  border: 0;
+  padding-left: 60px;
+  padding-right: 30px;
+}
+
+.sidebar .list-group .list-group-item.active,
+.sidebar .list-group .list-group-item:focus
+.sidebar .list-group .list-group-item:hover{
+  background-color: aquamarine;
+  color: wheat;
+}
+.card-header{
+  padding: 0.8rem,1.2rem;
+  margin-bottom: 0;
+  background-color: rgb(165, 101, 18);
+  border-bottom: 1px solid saddlebrown;
+
+}
+
+.card-body{
+  color: darkslategray;
+}

@@ -1,11 +1,17 @@
 {% extends 'restaurant/auth_base.html' %}
+{% load bootstrap4 %}
 
 {% block title %}LOGIN{% endblock %}
 {% block headline %}Login for the restaurant{% endblock  %}
 {% block body %}
 <form action="" method="post">
   <!-- secrety reasons  -->
-  {% csrf_token %} {{form}}
-  <button type="submit">Login</button>
+  {% csrf_token %} 
+  {% bootstrap_form form%}
+  
+  <button type="submit" class="btn btn-black btn-block">Login</button>
+  <div class="text-center mt-3">
+    <a href="{% url 'restaurant_register'%}">Register for a NYU restaurant </a>
+  </div>
 </form>
 {% endblock %}

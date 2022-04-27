@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -12,6 +13,8 @@
       integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="{% static 'css/styles.css'%}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Varela+Round" type="text/css">
     <script
       src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
       integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
@@ -24,8 +27,22 @@
     ></script>
   </head>
   <body>
-    {% block page_title %}{% endblock  %}
-    {% block body %}
-    {% endblock  %}
+  <div class="container-fluiid">
+    <div class="row">
+      <div class="col-md-2 page_title">
+        {% block page_title %}
+        {% endblock  %}
+      </div>
+
+      <div class="col-md-10 offset-md-2 content">
+        {% block body %}
+        {% endblock%}
+      </div>
+    </div>
+  </div>
+
+
+
+
   </body>
 </html>

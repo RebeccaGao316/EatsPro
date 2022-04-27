@@ -1,11 +1,27 @@
 {% extends 'restaurant/restaurant_temp.html' %}
 {% block page_title %}
-Dear {{request.user.name }},
+<div class="text-center mt-4">
+    <img src="{{request.user.restaurant.logo.url }}" class = "rounded-circle" width="80" height="80" alt="">
+    <br><br>
+    <h5>{{request.user.get_full_name}}</h5>
+    <h5>{{request.user.restaurant.name}}</h5>
+
+</div>
 <hr>
-<a href="{% url 'restaurant_account'%}"> Account </a>
-<a href="{% url 'restaurant_meal'%}"> Meals </a>
-<a href="{% url 'restaurant_report'%}"> Report </a>
-<a href="{% url 'restaurant_order'%}"> Order List </a>
+
+<div class="list-group">
+    <span class="text-uppercase">Dashboard</span>
+    <a href="{% url 'restaurant_meal'%}" class = "list-group-item"> Meals </a>
+    <a href="{% url 'restaurant_report'%}" class = "list-group-item"> Report </a>
+    <a href="{% url 'restaurant_order'%}" class = "list-group-item"> Order List </a>
+    <span class="text-uppercase">Profile</span>
+    <a href="{% url 'restaurant_account'%}" class = "list-group-item"> Account </a>
+
+</div>
+<div class="text-center my-3 mx-3">
+    <a href="{% url 'restaurant_logout'%}" class = "btn btn-warning btn-block"> Logout </a>
+</div>
+
 
 
 {% endblock  %}
