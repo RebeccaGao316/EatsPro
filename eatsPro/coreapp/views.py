@@ -14,6 +14,22 @@ def home(request):
 def restaurant_home(request):
     return render(request, 'restaurant/home.html',{})
 
+@login_required(login_url = '/restaurant/login/')
+def restaurant_account(request):
+    return render(request, 'restaurant/account.html',{})
+
+@login_required(login_url = '/restaurant/login/')
+def restaurant_meal(request):
+    return render(request, 'restaurant/meal.html',{})
+
+@login_required(login_url = '/restaurant/login/')
+def restaurant_order(request):
+    return render(request, 'restaurant/order.html',{})
+
+@login_required(login_url = '/restaurant/login/')
+def restaurant_report(request):
+    return render(request, 'restaurant/report.html',{})
+
 #    path('restaurant/register/',views.restaurant_register, name = 'restaurant_register'),
 def restaurant_register(request):
     user_form = UserForm()

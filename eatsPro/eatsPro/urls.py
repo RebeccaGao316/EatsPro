@@ -27,6 +27,16 @@ urlpatterns = [
     path('restaurant/logout/',auth_views.LogoutView.as_view(next_page = '/'),name = 'restaurant_logout'),
     path('restaurant/register/',views.restaurant_register, name = 'restaurant_register'),
 
+    path('restaurant/account/',views.restaurant_account, name = 'restaurant_account'),
+    path('restaurant/meal/',views.restaurant_meal, name = 'restaurant_meal'),
+    path('restaurant/order/',views.restaurant_order, name = 'restaurant_order'),
+    path('restaurant/report/',views.restaurant_report, name = 'restaurant_report'),
 
-    path('api/facebook', include('rest_framework_social_oauth2.urls'))
+
+
+
+    #provide a API for restraurant manager to register on facebook api
+    # in django oauth token in /admin: alist of user
+    #convert-token/revoke-token
+    path('api/facebook/', include('rest_framework_social_oauth2.urls'))
 ]

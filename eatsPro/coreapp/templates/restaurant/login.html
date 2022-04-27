@@ -1,16 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login</title>
-  </head>
-  <body>
-    <form action="" method="post">
-      <!-- secrety reasons  -->
-      {% csrf_token %} {{form}}
-      <button type="submit">Login</button>
-    </form>
-  </body>
-</html>
+{% extends 'restaurant/auth_base.html' %}
+
+{% block title %}LOGIN{% endblock %}
+{% block headline %}Login for the restaurant{% endblock  %}
+{% block body %}
+<form action="" method="post">
+  <!-- secrety reasons  -->
+  {% csrf_token %} {{form}}
+  <button type="submit">Login</button>
+</form>
+{% endblock %}

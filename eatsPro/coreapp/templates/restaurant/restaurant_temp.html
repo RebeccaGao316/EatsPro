@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home</title>
+    <title>EatsPro {% block title %}{% endblock  %}</title>
     <!-- Bootstrap ADD CSS & Javascript buddle -->
     <link
       rel="stylesheet"
@@ -24,15 +24,8 @@
     ></script>
   </head>
   <body>
-    <body>
-      <h1>Homepage for management system</h1>
-    <div class="row">
-      <div class="col-md-12 mb-2 text-center">
-        <h4>Welcome, {{user.username}}</h4>
-        <a href="{% url 'restaurant_logout'%}"> Logout</a>
-      </div>
-    </div>
-    <button class="btn btn-primary">Bootstrap button</button>
-    <button></button>
+    {% block page_title %}{% endblock  %}
+    {% block body %}
+    {% endblock  %}
   </body>
 </html>
