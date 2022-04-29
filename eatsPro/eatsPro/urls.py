@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from django.contrib.auth import views as auth_views
-from coreapp import views
+from coreapp import views,apis
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,6 +31,7 @@ urlpatterns = [
     #meal part
     path('restaurant/meal/',views.restaurant_meal, name = 'restaurant_meal'),
     path('restaurant/meal/add/',views.restaurant_add_item, name = 'restaurant_add_item'),
+    path('restaurant/meal/edit/<int:fooditem_id>',views.restaurant_edit_item, name = 'restaurant_edit_item'),
 
     path('restaurant/order/',views.restaurant_order, name = 'restaurant_order'),
     path('restaurant/report/',views.restaurant_report, name = 'restaurant_report'),
@@ -41,5 +42,18 @@ urlpatterns = [
     #provide a API for restraurant manager to register on facebook api
     # in django oauth token in /admin: alist of user
     #convert-token/revoke-token
-    path('api/facebook/', include('rest_framework_social_oauth2.urls'))
+
+    #login
+    path('api/facebook/', include('rest_framework_social_oauth2.urls')),
+    #res info
+    path('api/customer/restaurant/',views.customer_get_res_api),
+    #view items in certain res
+    path('api/customer/meals/<int:restaurant_id>/',views.customer_view_item_api),
+    #make order
+    path('api/customer/order/makeorder/',views.customer_make_order_api),
+    #currentorder
+    path('api/customer/order/current/',views.customer_current_order_api),
+
+
 ]
+

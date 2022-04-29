@@ -1,9 +1,50 @@
 {% extends 'restaurant/restaurant_base.html' %}
 
-{% block title %}Meals{% endblock  %}
+{% block title %}Item List{% endblock  %}
 
 
 {% block body %} 
 <h1>Restaurant Items List</h1>
-<a href="{% url 'restaurant_add_item'%}" class ="btn btn-black float-right">ADD FOOD ITEM</a>
+
+<div class="row">
+    <div class="col-md-10 offset-md-1">
+        <div class="card shadow text-white mb-3 mt-5">
+            <div class="card-header text-center">
+                <h5 class="m-0 font-weight-bold text-block">List of Food items</h5>
+            </div>
+            <div class="card-body">
+                <span class="float-right mb-3">
+                    <a href="{% url 'restaurant_add_item'%}" class ="btn btn-black float-right">ADD FOOD ITEM</a>
+
+                </span>
+
+                <table class="table table-striped table-hover table-bordered">
+                    <thead>
+                      <tr>
+                        <th scope="col">Item ID</th>
+                        <th scope="col">Item Name</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Price</th>
+
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {% for fooditem in fooditems %}
+                        <tr class = "align-middle">
+                            <th scope="row">{{fooditem.id}}</th>
+                            <td> <a href="{% url 'restaurant_edit_item' fooditem.id%}"> {{fooditem.name}}</a></td>
+                            <td>{{fooditem.description}}</td>
+                            <td>
+                                <img src="{{fooditem.image.url}}" class="rounded" width="80" height="80" alt="">
+                            </td>
+                            <td>${{fooditem.price}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                  </table>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock  %}

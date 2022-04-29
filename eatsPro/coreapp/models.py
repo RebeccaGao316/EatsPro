@@ -1,5 +1,7 @@
+from asyncio import create_task
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 from cloudinary.models import CloudinaryField
 
 # Create your models here.
@@ -42,3 +44,26 @@ class FoodItem(models.Model):
     price = models.FloatField(default=0.0)
     def __str__(self):
         return self.name
+
+class Order(models.Model):
+    PREPARING = 1
+    READY = 2
+    PICKED = 3
+    STATUS = ((PREPARING,"Preparing"),(READY,"Ready"),(PICKED,"Picked"),)
+    customer = models.ForeignKey(Customer,on_delete=models.PROTECT)
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.PROTECT)
+    price = models.FloatField()
+    status =  models.IntegerField(choices=STATUS)
+    create_time = models.DateTimeField(default=timezone.now)
+    def __str__(self):
+        return str(self.id)
+
+class OrderInfo(models.Model):
+    order = models.ForeignKey(Order,on_delete=models.PROTECT, related_name='order_infos')
+    foodItem = models.ForeignKey(FoodItem,on_delete=models.PROTECT)
+    quantity  = models.IntegerField()
+    subtotal = models.FloatField()
+
+    def __str__(self):
+        return str(self.id)
+ 

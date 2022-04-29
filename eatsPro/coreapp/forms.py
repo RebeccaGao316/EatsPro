@@ -28,3 +28,4 @@ class FoodItemForm(forms.ModelForm):
     class Meta:
         model = FoodItem
         exclude = ("restaurant",)
+        
