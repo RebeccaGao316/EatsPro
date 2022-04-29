@@ -53,6 +53,8 @@ urlpatterns = [
     path('api/customer/order/makeorder/',views.customer_make_order_api),
     #currentorder
     path('api/customer/order/current/',views.customer_current_order_api),
+    #only get status
+    path('api/customer/order/current_status/',views.customer_current_order_status_api),
 
 
 ]

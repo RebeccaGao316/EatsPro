@@ -23,6 +23,7 @@ class Customer(models.Model):
     net_id = models.CharField(max_length=255)
     phone = models.CharField(max_length=255)
     address = models.CharField(max_length=255, blank=True)
+
     profile_picture = models.CharField(max_length=255)
     def __str__(self):
         return self.user.get_full_name()

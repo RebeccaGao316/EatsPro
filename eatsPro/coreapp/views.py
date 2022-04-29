@@ -1,5 +1,7 @@
 from ast import Or
 import imp
+from telnetlib import STATUS
+from urllib import request
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
@@ -9,7 +11,9 @@ from coreapp.forms import AccountForm, UserForm, RestaurantForm, FoodItemForm
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from coreapp.models import Restaurant
-from coreapp.serializers import RestaurantSerializer,FoodItemSerializer
+from coreapp.serializers import OrderSerializer, OrderStatusSerializer, RestaurantSerializer,FoodItemSerializer,OrderInfoSerializer
+from coreapp.serializers import OrderCustomerSerializer,OrderFoodItemSerializer,OrderRestaurantSerializer,OrderStatusSerializer
+
 from django.utils import timezone
 from oauth2_provider.models import AccessToken
 import json
@@ -141,7 +145,15 @@ def customer_view_item_api(request,restaurant_id):
         context = {"request":request}
     ).data
     return JsonResponse({"foodItems":foodItems})
-
+"""
+    params:
+      1. access_token
+      2. restaurant_id
+      3. order_details (json format), example:
+          [{"foodItem_id": 1, "quantity": 2}, {"foodItem_id": 2, "quantity": 3}]
+    return:
+      {"status": "success"}
+  """
 @csrf_exempt
 def customer_make_order_api(request):
     if request.method =="POST":
@@ -150,8 +162,6 @@ def customer_make_order_api(request):
         
         customer = token.user.customer
         '''
-        if Order.objects.filter(customer=customer).exclude(status=Order.PICKED):
-            return JsonResponse({"status":"failed","error":"existinf"})
         json of order detail will include [{"foodItem_id":1,"quantity":2}] sets(maybe  multiple)
         '''
         order_infos = json.loads(request.POST["order_infos"])
@@ -170,6 +180,30 @@ def customer_make_order_api(request):
             
             )
     return JsonResponse({"status": "success"})
+"""
+    params:
+      1. access_token(identify user)
+    return:
+      a set of json data, with all current order(not picked), with all infos
+  """
 
 def customer_current_order_api(request):
-    return JsonResponse({})
+    token = AccessToken.objects.get(token=request.GET.get("access_token"),expires__gt = timezone.now())
+    customer = token.user.customer
+    current_orders=OrderSerializer(
+        Order.objects.filter(customer=customer).exclude(status = Order.PICKED).all(),
+        many = True
+        #Order.objects.filter(customer=customer).exclude(status=3).all()
+    ).data
+    return JsonResponse({"current_orders":current_orders})
+
+def customer_current_order_status_api(request):
+    token = AccessToken.objects.get(token=request.GET.get("access_token"),expires__gt = timezone.now())
+    customer = token.user.customer
+    current_order_status=OrderStatusSerializer(
+        Order.objects.filter(customer=customer).exclude(status = Order.PICKED).all(),
+        many = True
+        #Order.objects.filter(customer=customer).exclude(status=3).all()
+    ).data
+    return JsonResponse({"current_order_status":current_order_status})
+
