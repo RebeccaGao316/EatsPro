@@ -1,6 +1,8 @@
 from ast import Or
+from http import client
 import imp
 from telnetlib import STATUS
+from tkinter import E
 from urllib import request
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
@@ -13,10 +15,15 @@ from django.views.decorators.csrf import csrf_exempt
 from coreapp.models import Restaurant
 from coreapp.serializers import OrderSerializer, OrderStatusSerializer, RestaurantSerializer,FoodItemSerializer,OrderInfoSerializer
 from coreapp.serializers import OrderCustomerSerializer,OrderFoodItemSerializer,OrderRestaurantSerializer,OrderStatusSerializer
-
+from datetime import timedelta
 from django.utils import timezone
+import django.utils.timezone
+import stripe
+from eatsPro.settings import STRIPE_API_KEY
+stripe.api_key = STRIPE_API_KEY
 from oauth2_provider.models import AccessToken
 import json
+
 # Create your views here.
 
 #redirect everyone to homepage, add url in urls.py
@@ -48,6 +55,7 @@ def restaurant_account(request):
 @login_required(login_url = '/restaurant/login/')
 def restaurant_meal(request):
     fooditems = FoodItem.objects.filter(restaurant=request.user.restaurant).order_by("id")
+    
     return render(request, 'restaurant/meal.html',{"fooditems":fooditems})
 
 @login_required(login_url = '/restaurant/login/')
@@ -69,7 +77,6 @@ def restaurant_add_item(request):
 
 @login_required(login_url = '/restaurant/login/')
 def restaurant_edit_item(request,fooditem_id):
-    
     if request.method == "POST":
         food_item_form = FoodItemForm(request.POST,request.FILES, instance=FoodItem.objects.get(id=fooditem_id))
         if food_item_form.is_valid() :
@@ -98,7 +105,32 @@ def restaurant_order(request):
 
 @login_required(login_url = '/restaurant/login/')
 def restaurant_report(request):
-    return render(request, 'restaurant/report.html',{})
+    revenue = []
+    orderlist = []
+    today = timezone.now()
+    thisweek = []
+    todayindex = today.weekday()
+    today = today+timedelta(days=-todayindex)
+    today = today+timedelta(days=-1)
+
+    thisweek.append(today)
+    for i in range(6):
+        today += timedelta(days=-1)
+        thisweek.append(today)
+        
+    thisweek.reverse()
+    for date in  thisweek:
+        orders = Order.objects.filter(
+            restaurant = request.user.restaurant,
+            create_time__year = date.year,
+            create_time__month = date.month,
+            create_time__day = date.day,
+        )       
+        revenue.append(sum(order.price for order in orders))
+        print(revenue)
+        orderlist.append(orders.count())
+    
+    return render(request, 'restaurant/report.html',{"revenue":revenue,"orders":orderlist})
 
 #    path('restaurant/register/',views.restaurant_register, name = 'restaurant_register'),
 def restaurant_register(request):
@@ -186,7 +218,7 @@ def customer_make_order_api(request):
     return:
       a set of json data, with all current order(not picked), with all infos
   """
-
+@csrf_exempt
 def customer_current_order_api(request):
     token = AccessToken.objects.get(token=request.GET.get("access_token"),expires__gt = timezone.now())
     customer = token.user.customer
@@ -196,7 +228,7 @@ def customer_current_order_api(request):
         #Order.objects.filter(customer=customer).exclude(status=3).all()
     ).data
     return JsonResponse({"current_orders":current_orders})
-
+@csrf_exempt
 def customer_current_order_status_api(request):
     token = AccessToken.objects.get(token=request.GET.get("access_token"),expires__gt = timezone.now())
     customer = token.user.customer
@@ -207,3 +239,22 @@ def customer_current_order_status_api(request):
     ).data
     return JsonResponse({"current_order_status":current_order_status})
 
+
+'''paras: accesstoken(who is customer), price // return client_secret'''
+@csrf_exempt
+def create_payment(request):
+    token = AccessToken.objects.get(token=request.POST.get("access_token"),expires__gt = timezone.now())
+    price = request.POST["price"]
+    if request.method == "POST":
+        if token:
+            try:
+                intent = stripe.PaymentIntent.create(amount = int(price*100),currency='usd',description="eatsPro payment")
+                if intent:
+                    client_secret = intent.client_secret
+                    return JsonResponse({"client_secret":client_secret})
+            except stripe.error.StripeError as e:
+                return JsonResponse({"status":"failed", "error":str(e)})
+            except Exception as e:
+                return JsonResponse({"status":"failed", "error":"General Exception"})
+    return JsonResponse({"status":"failed", "error":"Please try again"})
+#apis might be useful

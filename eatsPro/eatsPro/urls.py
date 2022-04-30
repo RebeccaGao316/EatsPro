@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from django.contrib.auth import views as auth_views
-from coreapp import views,apis
+from coreapp import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -55,7 +55,8 @@ urlpatterns = [
     path('api/customer/order/current/',views.customer_current_order_api),
     #only get status
     path('api/customer/order/current_status/',views.customer_current_order_status_api),
-
+    #payment intent, a try to make payment
+    path('api/customer/make_payment/',views.create_payment),
 
 ]
 

@@ -125,6 +125,7 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'id, name, email, picture'
 }
 
+STRIPE_API_KEY = 'sk_test_51Ku4wxGtTfSLFHG1NB3FlCmjdtGpfbE36yBdOYoRwBdwmuvdzYeSENsLMoTmTxf1J2cfTrxHEfifpx4VB2dHd1Hv00q8bw5WkR'
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 

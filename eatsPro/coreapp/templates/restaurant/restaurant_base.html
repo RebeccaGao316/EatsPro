@@ -1,4 +1,5 @@
 {% extends 'restaurant/restaurant_temp.html' %}
+
 {% block page_title %}
 <div class="text-center mt-4">
     <img src="{{request.user.restaurant.logo.url }}" class = "rounded-circle" width="80" height="80" alt="">
@@ -17,7 +18,7 @@
     {% url 'restaurant_account' as accounturl%}
 
     <a href="{% url 'restaurant_meal'%}" class = "list-group-item {%if request.path == mealrurl %} active {% endif %}" > Food Items </a>
-    <a href="{% url 'restaurant_report'%}" class = "list-group-item {%if request.path == reporturl %} active {% endif %}" > Report </a>
+   <a href="{% url 'restaurant_report'%}" class = "list-group-item {%if request.path == reporturl %} active {% endif %}" > Report </a>
     <a href="{% url 'restaurant_order'%}" class = "list-group-item {%if request.path == orderurl %} active {% endif %}"> 
         Order List 
         <span class="badge badge-warning ml-2">
