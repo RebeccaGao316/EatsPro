@@ -1,8 +1,6 @@
 from ast import Or
 from http import client
-import imp
 from telnetlib import STATUS
-from tkinter import E
 from urllib import request
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
@@ -76,14 +74,14 @@ def restaurant_add_item(request):
         })
 
 @login_required(login_url = '/restaurant/login/')
-def restaurant_edit_item(request,fooditem_id):
+def restaurant_edit_item(request,foodItem_id):
     if request.method == "POST":
-        food_item_form = FoodItemForm(request.POST,request.FILES, instance=FoodItem.objects.get(id=fooditem_id))
+        food_item_form = FoodItemForm(request.POST,request.FILES, instance=FoodItem.objects.get(id=foodItem_id))
         if food_item_form.is_valid() :
             food_item_form.save()
             return redirect(restaurant_meal)
     
-    food_item_form = FoodItemForm(instance=FoodItem.objects.get(id=fooditem_id))
+    food_item_form = FoodItemForm(instance=FoodItem.objects.get(id=foodItem_id))
 
     return render(request, 'restaurant/editItem.html',{
         "food_item_form": food_item_form
@@ -96,6 +94,7 @@ def restaurant_order(request):
         if order.status == Order.PREPARING:
             order.status = Order.READY
             order.save()
+            order.sendMessage()
         elif order.status == Order.READY:
             order.status = Order.PICKED
             order.save()
@@ -168,6 +167,9 @@ def customer_get_res_api(request):
     ).data
     return JsonResponse({"restaurants":restaurants})
 
+
+
+
 @csrf_exempt
 def customer_view_item_api(request,restaurant_id):
     #from sqlite3-json
@@ -177,6 +179,9 @@ def customer_view_item_api(request,restaurant_id):
         context = {"request":request}
     ).data
     return JsonResponse({"foodItems":foodItems})
+
+
+
 """
     params:
       1. access_token
@@ -191,7 +196,6 @@ def customer_make_order_api(request):
     if request.method =="POST":
         token = AccessToken.objects.get(token=request.POST.get("access_token"),expires__gt = timezone.now())
         #not sure
-        
         customer = token.user.customer
         '''
         json of order detail will include [{"foodItem_id":1,"quantity":2}] sets(maybe  multiple)
@@ -228,6 +232,7 @@ def customer_current_order_api(request):
         #Order.objects.filter(customer=customer).exclude(status=3).all()
     ).data
     return JsonResponse({"current_orders":current_orders})
+    
 @csrf_exempt
 def customer_current_order_status_api(request):
     token = AccessToken.objects.get(token=request.GET.get("access_token"),expires__gt = timezone.now())
@@ -241,6 +246,7 @@ def customer_current_order_status_api(request):
 
 
 '''paras: accesstoken(who is customer), price // return client_secret'''
+
 @csrf_exempt
 def create_payment(request):
     token = AccessToken.objects.get(token=request.POST.get("access_token"),expires__gt = timezone.now())

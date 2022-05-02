@@ -3,6 +3,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from cloudinary.models import CloudinaryField
+import os
+from twilio.rest import Client
 
 # Create your models here.
 # restaurant class
@@ -58,6 +60,19 @@ class Order(models.Model):
     create_time = models.DateTimeField(default=timezone.now)
     def __str__(self):
         return str(self.id)
+    def sendMessage(self,*args, **kwargs):
+        if self.status == Order.READY:
+            account_sid = 'AC91199b7fb549ffd141615b511a1ca2c5'
+            auth_token = '853b3c99395490090874f7b2dce6c7b0'
+            client = Client(account_sid, auth_token)
+            message = client.messages \
+                            .create(
+                                body="The Order is ready.",
+                                from_='+13253356937',
+                                to=self.customer.phone
+                            )
+
+
 
 class OrderInfo(models.Model):
     order = models.ForeignKey(Order,on_delete=models.PROTECT, related_name='order_infos')

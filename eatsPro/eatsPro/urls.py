@@ -31,7 +31,7 @@ urlpatterns = [
     #meal part
     path('restaurant/meal/',views.restaurant_meal, name = 'restaurant_meal'),
     path('restaurant/meal/add/',views.restaurant_add_item, name = 'restaurant_add_item'),
-    path('restaurant/meal/edit/<int:fooditem_id>',views.restaurant_edit_item, name = 'restaurant_edit_item'),
+    path('restaurant/meal/edit/<int:foodItem_id>',views.restaurant_edit_item, name = 'restaurant_edit_item'),
 
     path('restaurant/order/',views.restaurant_order, name = 'restaurant_order'),
     path('restaurant/report/',views.restaurant_report, name = 'restaurant_report'),
