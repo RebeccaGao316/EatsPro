@@ -25,3 +25,12 @@ restaurant account:TandonRestaurant restaurant password: tandonpassword
 restaurant account: ManhattanRestaurant restaurant password: manhattanpassword
 
 Notice that the reason of 2.5-2.8 is that django-heroku has dependencies on psycopg2 and gunicorn, but psycopg2 is not well-prepared for install on many systems or versions. Thus, we use psycopg2-binary to instead psycopg2. So we need to install psycopg2-binary and gunicorn in advance and then install django-heroku with no dependencies.
+
+------------------------------------------------------------
+
+For frontend, we are using macOS Xcode, and the application does NOT work on PC. All outside kits specification has been added to podfile. All we need to do is to open the terminal and type in the following:
+
+1. sudo gem install cocoapods //if not installed
+2. pod install 
+
+ 
