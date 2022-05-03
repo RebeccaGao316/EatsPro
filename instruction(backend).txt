@@ -13,8 +13,11 @@ If it displays "RelatedObjectDoesNotExist at /restaurant/order/", it is because 
 2.6 use pip install to install psycopg2-binary==2.9.1,gunicorn==20.1.0
 2.7 pip install —no-dependencies django-heroku
 2.8 pip install -r requirements.txt
-2.9 python manage.py runserver
-2.10 go to http://127.0.0.1:8000/
+2.9 migrate all database using command
+python manage.py makemigrations
+python manage.oy migrate
+2.10 python manage.py runserver
+2.11 go to http://127.0.0.1:8000/
 
 Account: 
 superuser account: xinyu superuserpassword:yu010316
