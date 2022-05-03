@@ -35,7 +35,7 @@
                             <th scope="row">{{order.id}}</th>
                             <td>
                                 {% for orderdetail in order.order_infos.all %}
-                                    {{orderdetail.fooditem.name}}:${{orderdetail.fooditem.price}}*{{orderdetail.quantity}}=${{orderdetail.subtotal}}
+                                    {{orderdetail.foodItem.name}}:${{orderdetail.foodItem.price}}*{{orderdetail.quantity}}=${{orderdetail.subtotal}}
                                     <br>
                                 {% endfor %}
                             </td>

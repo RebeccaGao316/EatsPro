@@ -254,7 +254,7 @@ def create_payment(request):
     if request.method == "POST":
         if token:
             try:
-                intent = stripe.PaymentIntent.create(amount = int(price*100),currency='usd',description="eatsPro payment")
+                intent = stripe.PaymentIntent.create(amount = int(float(price)*100),currency='usd',description="eatsPro payment")
                 if intent:
                     client_secret = intent.client_secret
                     return JsonResponse({"client_secret":client_secret})
@@ -263,4 +263,6 @@ def create_payment(request):
             except Exception as e:
                 return JsonResponse({"status":"failed", "error":"General Exception"})
     return JsonResponse({"status":"failed", "error":"Please try again"})
+
+    
 #apis might be useful

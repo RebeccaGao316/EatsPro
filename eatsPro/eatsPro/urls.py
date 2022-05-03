@@ -56,7 +56,7 @@ urlpatterns = [
     #only get status
     path('api/customer/order/current_status/',views.customer_current_order_status_api),
     #payment intent, a try to make payment
-    path('api/customer/make_payment/',views.create_payment),
+    path('api/customer/make_payment',views.create_payment),
 
 ]
 
